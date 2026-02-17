@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Firebase Test</title>
+</head>
+<body>
+    <h1>Simple Firebase Test</h1>
+    <div id="output"></div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script>
+        function log(text) {
+            const output = document.getElementById('output');
+            output.innerHTML += `<p>${text}</p>`;
+            console.log(text);
+        }
+
+        log('=== Simple Firebase Test ===');
+        log('');
+
+        log('1. Checking if firebase object exists...');
+        log(`firebase: ${typeof firebase}`);
+        log('');
+
+        log('2. Checking window.firebaseConfig...');
+        log(`window.firebaseConfig: ${typeof window.firebaseConfig}`);
+        if (typeof window.firebaseConfig === 'object') {
+            log(`window.firebaseConfig properties: ${Object.keys(window.firebaseConfig).join(', ')}`);
+        }
+        log('');
+
+        log('3. Checking if initialize function exists...');
+        if (window.firebaseConfig && typeof window.firebaseConfig === 'object') {
+            log(`window.firebaseConfig.initialize: ${typeof window.firebaseConfig.initialize}`);
+            if (typeof window.firebaseConfig.initialize === 'function') {
+                log('');
+                log('4. Trying to initialize Firebase...');
+                try {
+                    const result = window.firebaseConfig.initialize();
+                    log(`Initialize result: ${result}`);
+                } catch (error) {
+                    log(`Error: ${error.message}`);
+                    log(error.stack);
+                }
+            }
+        }
+
+        log('');
+        log('=== Test Complete ===');
+    </script>
+</body>
+</html>

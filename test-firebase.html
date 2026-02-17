@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Test</title>
+</head>
+<body>
+    <h1>Firebase Connection Test</h1>
+    <button onclick="testFirebase()">Test Firebase Connection</button>
+    <button onclick="addTestSermon()">Add Test Sermon</button>
+    <button onclick="getAllSermons()">Get All Sermons</button>
+    <div id="result"></div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script>
+        async function testFirebase() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>Initializing Firebase...</p>';
+
+            try {
+                // Initialize Firebase
+                const initialized = firebaseConfig.initialize();
+                if (initialized) {
+                    resultDiv.innerHTML += '<p style="color: green;">✓ Firebase initialized successfully</p>';
+                    
+                    // Check if database is available
+                    const sermons = await firebaseConfig.getSermons();
+                    resultDiv.innerHTML += `<p style="color: blue;">✓ Number of sermons: ${sermons.length}</p>`;
+                } else {
+                    resultDiv.innerHTML += '<p style="color: red;">✗ Firebase not configured - using localStorage fallback</p>';
+                }
+            } catch (error) {
+                resultDiv.innerHTML += `<p style="color: red;">✗ Error: ${error.message}</p>`;
+                console.error(error);
+            }
+        }
+
+        async function addTestSermon() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>Adding test sermon...</p>';
+
+            try {
+                const testSermon = {
+                    videoId: 'dQw4w9WgXcQ', // Rick Astley - Never Gonna Give You Up
+                    title: 'Test Sermon - Never Gonna Give You Up',
+                    date: new Date().toISOString().split('T')[0],
+                    description: 'This is a test sermon to verify Firebase functionality.',
+                    views: '0'
+                };
+
+                const result = await firebaseConfig.addSermon(testSermon);
+                
+                if (result.success) {
+                    resultDiv.innerHTML += '<p style="color: green;">✓ Test sermon added successfully</p>';
+                    resultDiv.innerHTML += `<p>ID: ${result.sermon.id}</p>`;
+                } else {
+                    resultDiv.innerHTML += `<p style="color: red;">✗ Error: ${result.error}</p>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML += `<p style="color: red;">✗ Error: ${error.message}</p>`;
+                console.error(error);
+            }
+        }
+
+        async function getAllSermons() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>Getting all sermons...</p>';
+
+            try {
+                const sermons = await firebaseConfig.getSermons();
+                resultDiv.innerHTML += `<p style="color: blue;">✓ Found ${sermons.length} sermons</p>`;
+                
+                if (sermons.length > 0) {
+                    resultDiv.innerHTML += '<ul>';
+                    sermons.slice(0, 5).forEach(sermon => {
+                        resultDiv.innerHTML += `<li>${sermon.title} (${sermon.date})</li>`;
+                    });
+                    if (sermons.length > 5) {
+                        resultDiv.innerHTML += `<li>...and ${sermons.length - 5} more</li>`;
+                    }
+                    resultDiv.innerHTML += '</ul>';
+                }
+            } catch (error) {
+                resultDiv.innerHTML += `<p style="color: red;">✗ Error: ${error.message}</p>`;
+                console.error(error);
+            }
+        }
+
+        // Auto-test on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(testFirebase, 1000);
+        });
+    </script>
+</body>
+</html>

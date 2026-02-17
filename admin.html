@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Admin Panel - St Johns Chapel, Mengo">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Admin Panel | St Johns Chapel, Mengo</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
+    <link rel="apple-touch-icon" href="logo.jpg">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="logo.jpg" alt="St Johns Chapel Logo" class="logo-image">
+                <div class="logo-text">
+                    St Johns Chapel
+                    <span>Mengo</span>
+                </div>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="sermons.html">Sermons</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="ministries.html">Ministries</a></li>
+                <li><a href="giving.html">Giving</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            
+            <div class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header admin-header">
+        <div class="container">
+            <h1><i class="fas fa-cog"></i> Admin Panel</h1>
+            <p>Manage sermon videos and website content</p>
+        </div>
+    </header>
+
+    <!-- Admin Login Section -->
+    <section class="section" id="admin-login" style="display: none;">
+        <div class="container">
+            <div class="admin-login-card">
+                <h2><i class="fas fa-lock"></i> Administrator Login</h2>
+                <form id="admin-login-form">
+                    <div class="form-group">
+                        <label for="admin-password">Password</label>
+                        <input type="password" id="admin-password" placeholder="Enter admin password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </button>
+                </form>
+                <p class="admin-hint">Default password: admin123 (change this in production)</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin Dashboard Section -->
+    <section class="section section-light" id="admin-dashboard" style="display: block;">
+        <div class="container">
+            <!-- Admin Stats -->
+            <div class="admin-stats">
+                <div class="admin-stat-card">
+                    <i class="fas fa-video"></i>
+                    <h3 id="total-sermons">0</h3>
+                    <p>Total Sermons</p>
+                </div>
+                <div class="admin-stat-card">
+                    <i class="fas fa-eye"></i>
+                    <h3 id="total-views">0</h3>
+                    <p>Total Views</p>
+                </div>
+                <div class="admin-stat-card">
+                    <i class="fas fa-calendar"></i>
+                    <h3 id="latest-date">-</h3>
+                    <p>Latest Sermon</p>
+                </div>
+            </div>
+
+            <!-- Add New Sermon Form -->
+            <div class="admin-form-card">
+                <h2><i class="fas fa-plus-circle"></i> Add New Sermon</h2>
+                <form id="add-sermon-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="youtube-url">YouTube URL *</label>
+                            <div class="url-input-wrapper">
+                                <input type="url" id="youtube-url" placeholder="https://www.youtube.com/watch?v=..." required>
+                                <button type="button" class="btn btn-primary fetch-btn" onclick="fetchVideoDetails()">
+                                    <i class="fas fa-search"></i> Fetch Details
+                                </button>
+                            </div>
+                            <small>Enter the YouTube URL and click "Fetch Details" to auto-fill video information</small>
+                        </div>
+                    </div>
+                    
+                    <!-- Video Preview Section -->
+                    <div class="video-preview" id="video-preview" style="display: none;">
+                        <div class="video-preview-thumbnail">
+                            <img id="preview-thumbnail" src="" alt="Video Thumbnail">
+                        </div>
+                        <div class="video-preview-info">
+                            <h4 id="preview-title">Video Title</h4>
+                            <p id="preview-channel"><i class="fas fa-user"></i> Channel Name</p>
+                            <p id="preview-date"><i class="fas fa-calendar"></i> Date</p>
+                            <div class="loading-spinner" id="fetch-loading" style="display: none;">
+                                <i class="fas fa-spinner fa-spin"></i> Fetching video details...
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="sermon-title">Sermon Title *</label>
+                            <input type="text" id="sermon-title" placeholder="Auto-filled from YouTube" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="sermon-date">Date *</label>
+                            <input type="date" id="sermon-date" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sermon-description">Description</label>
+                        <textarea id="sermon-description" rows="3" placeholder="Enter a brief description of the sermon..."></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add Sermon
+                        </button>
+                        <button type="reset" class="btn btn-secondary" onclick="resetForm()">
+                            <i class="fas fa-undo"></i> Clear Form
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Sermons List -->
+            <div class="admin-list-card">
+                <div class="admin-list-header">
+                    <h2><i class="fas fa-list"></i> Manage Sermons</h2>
+                    <div class="admin-list-actions">
+                        <button class="btn btn-secondary btn-sm" onclick="exportSermons()">
+                            <i class="fas fa-download"></i> Export
+                        </button>
+                        <button class="btn btn-danger btn-sm" onclick="clearAllSermons()">
+                            <i class="fas fa-trash"></i> Clear All
+                        </button>
+                    </div>
+                </div>
+                <div class="admin-sermon-list" id="admin-sermon-list">
+                    <!-- Sermons will be loaded here dynamically -->
+                    <p class="no-sermons">No sermons added yet. Add your first sermon above!</p>
+                </div>
+            </div>
+
+            <!-- Admin Actions -->
+            <div class="admin-actions">
+                <a href="sermons.html" class="btn btn-primary">
+                    <i class="fas fa-eye"></i> View Sermons Page
+                </a>
+                <button class="btn btn-secondary" onclick="logoutAdmin()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 St Johns Chapel, Mengo. Admin Panel.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    
+    <!-- JavaScript -->
+    <script src="js/script.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script>
+        // Admin Panel Configuration
+        const ADMIN_PASSWORD = 'admin123'; // Change this in production!
+
+        // Skip login and show dashboard directly for testing
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Initialize Firebase
+            firebaseConfig.initialize();
+            
+            // Show dashboard directly
+            document.getElementById('admin-login').style.display = 'none';
+            document.getElementById('admin-dashboard').style.display = 'block';
+            await loadSermonsList();
+            await updateStats();
+        });
+
+        // Show login form
+        function showLoginForm() {
+            document.getElementById('admin-login').style.display = 'block';
+            document.getElementById('admin-dashboard').style.display = 'none';
+        }
+
+        // Show dashboard
+        async function showDashboard() {
+            document.getElementById('admin-login').style.display = 'none';
+            document.getElementById('admin-dashboard').style.display = 'block';
+            await loadSermonsList();
+        }
+
+        // Handle login form submission
+        document.getElementById('admin-login-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const password = document.getElementById('admin-password').value;
+            
+            if (password === ADMIN_PASSWORD) {
+                sessionStorage.setItem('adminLoggedIn', 'true');
+                await showDashboard();
+                showAdminMessage('Login successful! Welcome, Administrator.', 'success');
+            } else {
+                showAdminMessage('Invalid password. Please try again.', 'error');
+            }
+        });
+
+        // Handle add sermon form submission
+        document.getElementById('add-sermon-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const youtubeUrl = document.getElementById('youtube-url').value;
+            const videoId = extractYouTubeVideoId(youtubeUrl);
+            
+            if (!videoId) {
+                showAdminMessage('Invalid YouTube URL. Please enter a valid YouTube video URL.', 'error');
+                return;
+            }
+
+            // Validate required fields
+            const title = document.getElementById('sermon-title').value;
+            const date = document.getElementById('sermon-date').value;
+            
+            if (!title || !date) {
+                showAdminMessage('Please fill in all required fields.', 'error');
+                return;
+            }
+
+            const sermon = {
+                videoId: videoId,
+                title: title,
+                date: date,
+                description: document.getElementById('sermon-description').value || 'A powerful message from St Johns Chapel, Mengo.',
+                views: '0'
+            };
+
+            // Add sermon using Firebase function
+            firebaseConfig.addSermon(sermon).then(result => {
+                if (result.success) {
+                    // Show success animation on form card
+                    const formCard = document.querySelector('.admin-form-card');
+                    formCard.classList.add('success-pulse');
+                    setTimeout(() => formCard.classList.remove('success-pulse'), 600);
+                    
+                    // Reset form
+                    this.reset();
+                    resetForm();
+                    
+                    // Update UI
+                    loadSermonsList();
+                    updateStats();
+                    
+                    // Scroll to the sermon list to show the new addition
+                    setTimeout(() => {
+                        document.getElementById('admin-sermon-list').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 300);
+                    
+                    showAdminMessage('<i class="fas fa-check-circle"></i> Sermon added successfully! It will now appear on the Sermons page.', 'success');
+                } else {
+                    showAdminMessage(`Error adding sermon: ${result.error}`, 'error');
+                }
+            });
+        });
+
+        // Fetch video details from YouTube
+        async function fetchVideoDetails() {
+            const urlInput = document.getElementById('youtube-url');
+            const youtubeUrl = urlInput.value.trim();
+            
+            if (!youtubeUrl) {
+                showAdminMessage('Please enter a YouTube URL first.', 'error');
+                urlInput.focus();
+                urlInput.classList.add('shake-animation');
+                setTimeout(() => urlInput.classList.remove('shake-animation'), 500);
+                return;
+            }
+
+            const videoId = extractYouTubeVideoId(youtubeUrl);
+            
+            if (!videoId) {
+                showAdminMessage('Invalid YouTube URL. Please enter a valid YouTube video URL.', 'error');
+                urlInput.focus();
+                urlInput.classList.add('shake-animation');
+                setTimeout(() => urlInput.classList.remove('shake-animation'), 500);
+                return;
+            }
+
+            // Show loading state
+            const loadingSpinner = document.getElementById('fetch-loading');
+            const videoPreview = document.getElementById('video-preview');
+            const fetchBtn = document.querySelector('.fetch-btn');
+            const previewThumbnail = document.getElementById('preview-thumbnail');
+            const previewTitle = document.getElementById('preview-title');
+            const previewChannel = document.getElementById('preview-channel');
+            const previewDate = document.getElementById('preview-date');
+            
+            // Reset preview content
+            previewThumbnail.src = '';
+            previewTitle.textContent = '';
+            previewChannel.innerHTML = '';
+            previewDate.innerHTML = '';
+            
+            loadingSpinner.style.display = 'block';
+            videoPreview.style.display = 'flex';
+            videoPreview.classList.remove('animate-preview', 'animate-error');
+            fetchBtn.disabled = true;
+            fetchBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Fetching...';
+
+            try {
+                // Use YouTube oEmbed API to fetch video details
+                const oembedUrl = `https://www.youtube.com/oembed?url=${encodeURIComponent(youtubeUrl)}&format=json`;
+                
+                const response = await fetch(oembedUrl);
+                
+                if (!response.ok) {
+                    throw new Error('Could not fetch video details');
+                }
+                
+                const data = await response.json();
+                
+                // Hide loading spinner
+                loadingSpinner.style.display = 'none';
+                
+                // Update preview with animation
+                previewThumbnail.src = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+                previewTitle.textContent = data.title;
+                previewChannel.innerHTML = `<i class="fas fa-user"></i> ${data.author_name}`;
+                
+                // Set today's date as default
+                const today = new Date().toISOString().split('T')[0];
+                const formattedToday = new Date().toLocaleDateString('en-US', { 
+                    month: 'short', 
+                    day: 'numeric', 
+                    year: 'numeric' 
+                });
+                previewDate.innerHTML = `<i class="fas fa-calendar"></i> ${formattedToday}`;
+                
+                // Add success animation
+                videoPreview.classList.add('animate-preview');
+                
+                // Auto-fill form fields with animation
+                const titleInput = document.getElementById('sermon-title');
+                const dateInput = document.getElementById('sermon-date');
+                
+                titleInput.value = data.title;
+                dateInput.value = today;
+                
+                // Add highlight animation to filled fields
+                [titleInput, dateInput].forEach(input => {
+                    input.classList.add('field-highlight');
+                    setTimeout(() => input.classList.remove('field-highlight'), 1000);
+                });
+                
+                showAdminMessage('<i class="fas fa-check-circle"></i> Video details fetched successfully! Click "Add Sermon" to save.', 'success');
+                
+            } catch (error) {
+                console.error('Error fetching video details:', error);
+                
+                // Hide loading spinner
+                loadingSpinner.style.display = 'none';
+                
+                // Still show preview with video ID
+                previewThumbnail.src = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+                previewTitle.textContent = 'Video Found';
+                previewChannel.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Could not fetch details - please fill manually';
+                
+                // Add error animation
+                videoPreview.classList.add('animate-error');
+                
+                // Set today's date as default
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('sermon-date').value = today;
+                
+                showAdminMessage('<i class="fas fa-info-circle"></i> Could not auto-fetch all details. Please fill in the form manually.', 'error');
+            } finally {
+                fetchBtn.disabled = false;
+                fetchBtn.innerHTML = '<i class="fas fa-search"></i> Fetch Details';
+            }
+        }
+
+        // Reset form and preview
+        function resetForm() {
+            document.getElementById('video-preview').style.display = 'none';
+            document.getElementById('preview-thumbnail').src = '';
+            document.getElementById('preview-title').textContent = '';
+            document.getElementById('preview-channel').innerHTML = '';
+            document.getElementById('preview-date').innerHTML = '';
+        }
+
+        // Auto-fetch on URL input blur (optional - uncomment to enable)
+        // document.getElementById('youtube-url').addEventListener('blur', function() {
+        //     if (this.value.trim()) {
+        //         fetchVideoDetails();
+        //     }
+        // });
+
+        // Allow pressing Enter in URL field to fetch
+        document.getElementById('youtube-url').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                fetchVideoDetails();
+            }
+        });
+
+        // Extract YouTube video ID from URL
+        function extractYouTubeVideoId(url) {
+            const patterns = [
+                /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
+                /youtube\.com\/shorts\/([^&\n?#]+)/,
+                /youtube\.com\/live\/([^&\n?#]+)/
+            ];
+            
+            for (const pattern of patterns) {
+                const match = url.match(pattern);
+                if (match && match[1]) {
+                    return match[1];
+                }
+            }
+            return null;
+        }
+
+        // Load sermons list in admin panel
+        async function loadSermonsList() {
+            const sermons = await firebaseConfig.getSermons();
+            const listContainer = document.getElementById('admin-sermon-list');
+            
+            if (sermons.length === 0) {
+                listContainer.innerHTML = '<p class="no-sermons">No sermons added yet. Add your first sermon above!</p>';
+                return;
+            }
+
+            listContainer.innerHTML = sermons.map((sermon, index) => `
+                <div class="admin-sermon-item" data-id="${sermon.id}" style="animation-delay: ${index * 0.05}s">
+                    <div class="admin-sermon-thumbnail">
+                        <img src="https://img.youtube.com/vi/${sermon.videoId}/mqdefault.jpg" alt="${sermon.title}" loading="lazy">
+                    </div>
+                    <div class="admin-sermon-info">
+                        <h4>${sermon.title}</h4>
+                        <p><i class="fas fa-calendar"></i> ${formatDate(sermon.date)}</p>
+                    </div>
+                    <div class="admin-sermon-actions">
+                        <button class="btn btn-sm btn-primary" onclick="editSermon('${sermon.id}')" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteSermon('${sermon.id}')" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                        <a href="https://youtube.com/watch?v=${sermon.videoId}" target="_blank" class="btn btn-sm btn-secondary" title="View on YouTube">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Edit sermon
+        async function editSermon(id) {
+            const sermons = await firebaseConfig.getSermons();
+            const sermon = sermons.find(s => s.id === id);
+            
+            if (!sermon) return;
+
+            // Populate form with sermon data
+            document.getElementById('youtube-url').value = `https://www.youtube.com/watch?v=${sermon.videoId}`;
+            document.getElementById('sermon-title').value = sermon.title;
+            document.getElementById('sermon-date').value = sermon.date;
+            document.getElementById('sermon-description').value = sermon.description || '';
+
+            // Show video preview
+            const videoPreview = document.getElementById('video-preview');
+            videoPreview.style.display = 'flex';
+            videoPreview.classList.add('animate-preview');
+            document.getElementById('preview-thumbnail').src = `https://img.youtube.com/vi/${sermon.videoId}/mqdefault.jpg`;
+            document.getElementById('preview-title').textContent = sermon.title;
+            document.getElementById('preview-channel').innerHTML = '';
+            document.getElementById('preview-date').innerHTML = `<i class="fas fa-calendar"></i> ${formatDate(sermon.date)}`;
+
+            // Remove the sermon (will be re-added on submit)
+            await firebaseConfig.deleteSermon(id);
+
+            // Scroll to form
+            document.getElementById('add-sermon-form').scrollIntoView({ behavior: 'smooth' });
+            
+            showAdminMessage('Sermon loaded for editing. Make changes and click Add Sermon to save.', 'success');
+        }
+
+        // Delete sermon
+        async function deleteSermon(id) {
+            if (!confirm('Are you sure you want to delete this sermon?')) return;
+
+            // Find and animate the item
+            const item = document.querySelector(`.admin-sermon-item[data-id="${id}"]`);
+            if (item) {
+                item.classList.add('delete-animation');
+                setTimeout(async () => {
+                    const result = await firebaseConfig.deleteSermon(id);
+                    if (result.success) {
+                        loadSermonsList();
+                        updateStats();
+                        showAdminMessage('<i class="fas fa-trash"></i> Sermon deleted successfully.', 'success');
+                    } else {
+                        showAdminMessage(`Error deleting sermon: ${result.error}`, 'error');
+                    }
+                }, 300);
+            } else {
+                const result = await firebaseConfig.deleteSermon(id);
+                if (result.success) {
+                    loadSermonsList();
+                    updateStats();
+                    showAdminMessage('<i class="fas fa-trash"></i> Sermon deleted successfully.', 'success');
+                } else {
+                    showAdminMessage(`Error deleting sermon: ${result.error}`, 'error');
+                }
+            }
+        }
+
+        // Clear all sermons
+        async function clearAllSermons() {
+            if (!confirm('Are you sure you want to delete ALL sermons? This action cannot be undone.')) return;
+            
+            const result = await firebaseConfig.clearAllSermons();
+            if (result.success) {
+                loadSermonsList();
+                updateStats();
+                showAdminMessage('All sermons have been cleared.', 'success');
+            } else {
+                showAdminMessage(`Error clearing sermons: ${result.error}`, 'error');
+            }
+        }
+
+        // Export sermons to JSON file
+        async function exportSermons() {
+            const sermons = await firebaseConfig.getSermons();
+            const dataStr = JSON.stringify(sermons, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'sermons-backup-' + new Date().toISOString().split('T')[0] + '.json';
+            link.click();
+            
+            URL.revokeObjectURL(url);
+            showAdminMessage('Sermons exported successfully!', 'success');
+        }
+
+        // Update statistics
+        async function updateStats() {
+            const sermons = await firebaseConfig.getSermons();
+            
+            document.getElementById('total-sermons').textContent = sermons.length;
+            
+            // Calculate total views (simulated)
+            const totalViews = sermons.reduce((sum, s) => {
+                const views = parseInt(s.views.replace(/[^0-9]/g, '')) || 0;
+                return sum + views;
+            }, 0);
+            document.getElementById('total-views').textContent = formatNumber(totalViews);
+            
+            // Get latest sermon date
+            if (sermons.length > 0) {
+                const latestDate = sermons[0].date;
+                document.getElementById('latest-date').textContent = formatDate(latestDate);
+            } else {
+                document.getElementById('latest-date').textContent = '-';
+            }
+        }
+
+        // Format date
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric', 
+                year: 'numeric' 
+            });
+        }
+
+        // Format number with K suffix
+        function formatNumber(num) {
+            if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+
+        // Logout admin
+        function logoutAdmin() {
+            sessionStorage.removeItem('adminLoggedIn');
+            showLoginForm();
+            showAdminMessage('You have been logged out.', 'success');
+        }
+
+        // Show admin message
+        function showAdminMessage(message, type) {
+            const existingMessage = document.querySelector('.admin-message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `admin-message ${type}`;
+            messageDiv.innerHTML = `
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+                ${message}
+            `;
+
+            const container = document.querySelector('#admin-dashboard .container') || 
+                              document.querySelector('#admin-login .container');
+            container.insertBefore(messageDiv, container.firstChild);
+
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Listen to sermons from St Johns Chapel, Mengo. Grow in your faith through the preaching of God's Word.">
+    <meta name="keywords" content="St Johns Chapel, Sermons, Audio Sermons, Video Sermons, Preaching">
+    <title>Sermons | St Johns Chapel, Mengo</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
+    <link rel="apple-touch-icon" href="logo.jpg">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="logo.jpg" alt="St Johns Chapel Logo" class="logo-image">
+                <div class="logo-text">
+                    St Johns Chapel
+                    <span>Mengo</span>
+                </div>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="sermons.html" class="active">Sermons</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="ministries.html">Ministries</a></li>
+                <li><a href="giving.html">Giving</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            
+            <div class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <h1>Sermons</h1>
+            <p>Grow in your faith through the preaching of God's Word</p>
+        </div>
+    </header>
+
+    <!-- Featured Sermon Section - YouTube Style -->
+    <section class="section" id="featured-sermon">
+        <div class="container">
+            <div class="yt-featured">
+                <div class="yt-video-player">
+                    <div class="yt-video-wrapper" id="video-wrapper">
+                        <div class="video-placeholder" id="video-placeholder">
+                            <i class="fas fa-play-circle"></i>
+                            <p>Select a sermon below to watch</p>
+                        </div>
+                        <!-- YouTube IFrame API will replace this div -->
+                        <div id="main-video-player"></div>
+                    </div>
+                </div>
+                <div class="yt-video-info">
+                    <h2 class="yt-video-title" id="current-video-title">Select a Sermon to Watch</h2>
+                    <div class="yt-video-stats">
+                        <span><i class="fas fa-eye"></i> <span id="current-video-views">-</span> views</span>
+                        <span><i class="fas fa-calendar"></i> <span id="current-video-date">-</span></span>
+                    </div>
+                    <div class="yt-channel-info">
+                        <div class="yt-channel-details">
+                            <h4>St Johns Chapel, Mengo</h4>
+                            <span>Official YouTube Channel</span>
+                        </div>
+                        <a href="https://youtube.com/@st.johnschapelmengo?sub_confirmation=1" target="_blank" class="yt-subscribe-btn">Subscribe</a>
+                    </div>
+                    <div class="yt-video-description">
+                        <p id="current-video-description">Click on any sermon thumbnail below to watch it here. Sermons are loaded from our YouTube channel.</p>
+                    </div>
+                    <div class="yt-video-actions">
+                        <a href="https://youtube.com/@st.johnschapelmengo" target="_blank" class="yt-action-btn"><i class="fab fa-youtube"></i> Visit Channel</a>
+                        <a href="https://youtube.com/@st.johnschapelmengo?sub_confirmation=1" target="_blank" class="yt-action-btn"><i class="fas fa-bell"></i> Subscribe</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- All Sermons Section - YouTube Grid Style -->
+    <section class="section section-light" id="all-sermons">
+        <div class="container">
+            <h2 class="section-title">Recent Sermons</h2>
+            <div class="yt-video-grid" id="sermons-grid">
+                <!-- Sermons will be loaded dynamically from localStorage -->
+                <!-- No sermons message -->
+                <div class="no-sermons-message" id="no-sermons-message" style="display: none; text-align: center; padding: 60px 20px; background: var(--white); border-radius: 12px; box-shadow: var(--shadow);">
+                    <i class="fas fa-video-slash" style="font-size: 4rem; color: var(--gold); margin-bottom: 20px;"></i>
+                    <h3 style="color: var(--primary-blue); margin-bottom: 15px;">No Sermons Available</h3>
+                    <p style="color: var(--medium-gray); margin-bottom: 25px;">Sermons will appear here once they are added through the Admin panel.</p>
+                    <a href="admin.html" class="btn btn-primary"><i class="fas fa-plus"></i> Add Sermons</a>
+                </div>
+            </div>
+            
+            <!-- Visit Channel Button -->
+            <div class="text-center mt-4">
+                <a href="https://youtube.com/@st.johnschapelmengo" target="_blank" class="btn btn-primary">
+                    <i class="fab fa-youtube"></i> Visit Our YouTube Channel
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="section section-dark">
+        <div class="container text-center">
+            <h2>Subscribe to Our Sermons</h2>
+            <p>Never miss a sermon! Subscribe to our YouTube channel to receive notifications when new sermons are available.</p>
+            <div class="mt-3">
+                <a href="https://youtube.com/@st.johnschapelmengo?sub_confirmation=1" target="_blank" class="btn btn-gold">
+                    <i class="fab fa-youtube"></i> Subscribe on YouTube
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>St Johns Chapel, Mengo</h4>
+                    <p>A Place of Worship, Fellowship & Growth. We are committed to spreading the Gospel of Jesus Christ and serving our community with love.</p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://youtube.com/@st.johnschapelmengo" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="admin.html" aria-label="Admin" class="admin-footer-link"><i class="fas fa-cog"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <div class="footer-links">
+                        <a href="about.html">About Us</a>
+                        <a href="sermons.html">Sermons</a>
+                        <a href="events.html">Events</a>
+                        <a href="ministries.html">Ministries</a>
+                        <a href="giving.html">Giving</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Service Times</h4>
+                    <p><strong>Sunday Service:</strong><br>8:00 AM & 10:30 AM</p>
+                    <p><strong>Bible Study:</strong><br>Wednesday 6:00 PM</p>
+                    <p><strong>Evening Service:</strong><br>Sunday 6:00 PM</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Us</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Mengo, Kampala, Uganda</p>
+                    <p><i class="fas fa-phone"></i> +256 414 123 456</p>
+                    <p><i class="fas fa-envelope"></i> info@stjohnschapelmengo.org</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 St Johns Chapel, Mengo. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <!-- JavaScript -->
+    <script src="js/script.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <!-- YouTube IFrame API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        // Global variables for YouTube player
+        let player = null;
+        let currentVideoId = null;
+
+        // YouTube IFrame API callback - called when API is ready
+        function onYouTubeIframeAPIReady() {
+            console.log('YouTube IFrame API is ready');
+            
+            // Check if running from file:// protocol - YouTube embeds require http:// or https://
+            if (window.location.protocol === 'file:') {
+                console.warn('YouTube embeds require a web server. Please serve this page via http:// or https://');
+                showFileProtocolError();
+                // Still initialize player but it won't work properly
+            }
+            
+            // Initialize the player (but don't load a video yet)
+            player = new YT.Player('main-video-player', {
+                height: '100%',
+                width: '100%',
+                playerVars: {
+                    'autoplay': 0,
+                    'rel': 0,
+                    'modestbranding': 1
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onError': onPlayerError,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        // Show error when running from file:// protocol
+        function showFileProtocolError() {
+            const wrapper = document.getElementById('video-wrapper');
+            if (!wrapper) return;
+            
+            const placeholder = document.getElementById('video-placeholder');
+            if (placeholder) {
+                placeholder.style.display = 'none';
+            }
+            
+            clearEmbedError();
+            
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'embed-error-message';
+            errorDiv.style.cssText = `
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                padding: 40px;
+                z-index: 10;
+            `;
+            
+            errorDiv.innerHTML = `
+                <i class="fas fa-server" style="font-size: 4rem; color: #d4af37; margin-bottom: 20px;"></i>
+                <h3 style="color: #fff; margin-bottom: 10px; font-family: 'Playfair Display', serif;">Web Server Required</h3>
+                <p style="color: #ccc; margin-bottom: 10px; max-width: 400px;">YouTube videos require this page to be served from a web server.</p>
+                <p style="color: #999; font-size: 0.9rem; max-width: 400px; margin-bottom: 20px;">You are currently opening this file directly. Please use a local development server.</p>
+                <code style="background: rgba(255,255,255,0.1); padding: 10px 15px; border-radius: 5px; color: #d4af37; font-size: 0.85rem;">
+                    npx serve . OR python -m http.server 8000
+                </code>
+            `;
+            
+            wrapper.appendChild(errorDiv);
+        }
+
+        // Called when the player is ready
+        async function onPlayerReady(event) {
+            console.log('YouTube player is ready');
+            // Now load sermons
+            await loadDynamicSermons();
+            initVideoPlayer();
+        }
+
+        // Handle player errors
+        function onPlayerError(event) {
+            console.error('YouTube player error:', event.data);
+            const errorMessages = {
+                2: 'Invalid video ID',
+                5: 'HTML5 player error',
+                100: 'Video not found or removed',
+                101: 'Video does not allow embedding',
+                150: 'Video does not allow embedding'
+            };
+            const errorMessage = errorMessages[event.data] || 'Unknown error';
+            console.error('Error details:', errorMessage);
+            
+            // Show user-friendly error message in the player area
+            showEmbedError(event.data, errorMessage);
+        }
+
+        // Show embed error message with link to YouTube
+        function showEmbedError(errorCode, errorMessage) {
+            const wrapper = document.getElementById('video-wrapper');
+            if (!wrapper) return;
+            
+            // Remove any existing error message first
+            clearEmbedError();
+            
+            // Create error message element
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'embed-error-message';
+            errorDiv.style.cssText = `
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                padding: 40px;
+                z-index: 10;
+            `;
+            
+            // Build YouTube link if we have a video ID
+            const youtubeLink = currentVideoId 
+                ? `<a href="https://www.youtube.com/watch?v=${currentVideoId}" target="_blank" class="btn btn-primary" style="margin-top: 20px; display: inline-flex; align-items: center; gap: 8px;">
+                        <i class="fab fa-youtube"></i> Watch on YouTube
+                   </a>`
+                : '';
+            
+            errorDiv.innerHTML = `
+                <i class="fas fa-exclamation-triangle" style="font-size: 4rem; color: #d4af37; margin-bottom: 20px;"></i>
+                <h3 style="color: #fff; margin-bottom: 10px; font-family: 'Playfair Display', serif;">Unable to Play Video</h3>
+                <p style="color: #ccc; margin-bottom: 10px; max-width: 400px;">${errorMessage}</p>
+                <p style="color: #999; font-size: 0.9rem; max-width: 400px;">This video cannot be played here, but you can watch it directly on YouTube.</p>
+                ${youtubeLink}
+            `;
+            
+            wrapper.appendChild(errorDiv);
+        }
+
+        // Clear any existing embed error message
+        function clearEmbedError() {
+            const wrapper = document.getElementById('video-wrapper');
+            if (!wrapper) return;
+            
+            const existingError = wrapper.querySelector('.embed-error-message');
+            if (existingError) {
+                existingError.remove();
+            }
+        }
+
+        // Handle player state changes
+        function onPlayerStateChange(event) {
+            console.log('Player state changed:', event.data);
+        }
+
+        // Load sermons from localStorage and display them
+        document.addEventListener('DOMContentLoaded', function() {
+            // YouTube API will call onYouTubeIframeAPIReady when ready
+        });
+
+        // Load sermons from Firebase
+        async function loadDynamicSermons() {
+            // Initialize Firebase
+            firebaseConfig.initialize();
+            
+            const sermons = await firebaseConfig.getSermons();
+            const grid = document.getElementById('sermons-grid');
+            const noSermonsMessage = document.getElementById('no-sermons-message');
+
+            if (sermons.length > 0) {
+                // Hide no sermons message
+                if (noSermonsMessage) {
+                    noSermonsMessage.style.display = 'none';
+                }
+
+                // Create sermon cards from Firebase data
+                const sermonCards = sermons.map(sermon => createSermonCard(sermon)).join('');
+                
+                // Add dynamic sermons to grid
+                const dynamicContainer = document.createElement('div');
+                dynamicContainer.id = 'dynamic-sermons';
+                dynamicContainer.className = 'sermons-container';
+                dynamicContainer.innerHTML = sermonCards;
+                grid.insertBefore(dynamicContainer, noSermonsMessage);
+
+                // Update featured video with the latest sermon
+                updateFeaturedVideo(sermons[0]);
+            } else {
+                // Show no sermons message
+                if (noSermonsMessage) {
+                    noSermonsMessage.style.display = 'block';
+                }
+            }
+        }
+
+        // Create a sermon card HTML
+        function createSermonCard(sermon) {
+            const formattedDate = formatDate(sermon.date);
+            const fallbackThumbnail = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="320" height="180" viewBox="0 0 320 180"><rect fill="#1a1a2e" width="320" height="180"/><text fill="#d4af37" font-family="Arial" font-size="14" x="160" y="90" text-anchor="middle">Video Thumbnail</text></svg>');
+            
+            return `
+                <div class="yt-video-card fade-in" 
+                     data-video-id="${sermon.videoId}"
+                     data-title="${sermon.title}"
+                     data-views="${sermon.views}"
+                     data-date="${formattedDate}"
+                     data-description="${sermon.description}">
+                    <div class="yt-thumbnail">
+                        <img src="https://img.youtube.com/vi/${sermon.videoId}/hqdefault.jpg" 
+                             alt="${sermon.title}"
+                             onerror="this.src='${fallbackThumbnail}'">
+                        <div class="yt-play-overlay">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="yt-video-card-info">
+                        <div class="yt-video-card-details">
+                            <h4>${sermon.title}</h4>
+                            <p class="yt-video-meta">${sermon.views} views &bull; ${formattedDate}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Update featured video section
+        function updateFeaturedVideo(sermon) {
+            if (!sermon) return;
+
+            // Validate video ID
+            if (!sermon.videoId || sermon.videoId.length !== 11) {
+                console.error('Invalid video ID in sermon:', sermon.videoId);
+                return;
+            }
+
+            const placeholder = document.getElementById('video-placeholder');
+            const currentTitle = document.getElementById('current-video-title');
+            const currentViews = document.getElementById('current-video-views');
+            const currentDate = document.getElementById('current-video-date');
+            const currentDescription = document.getElementById('current-video-description');
+
+            // Hide placeholder
+            if (placeholder) {
+                placeholder.style.display = 'none';
+            }
+
+            // Clear any existing error message
+            clearEmbedError();
+
+            // Load video in player
+            if (player && player.loadVideoById) {
+                player.loadVideoById({
+                    videoId: sermon.videoId,
+                    suggestedQuality: 'default'
+                });
+            }
+
+            // Update video info
+            if (currentTitle) currentTitle.textContent = sermon.title;
+            if (currentViews) currentViews.textContent = sermon.views;
+            if (currentDate) currentDate.textContent = formatDate(sermon.date);
+            if (currentDescription) currentDescription.textContent = sermon.description;
+            
+            currentVideoId = sermon.videoId;
+        }
+
+        // Format date
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric', 
+                year: 'numeric' 
+            });
+        }
+
+        // Video player functionality - uses event delegation for reliability
+        function initVideoPlayer() {
+            const grid = document.getElementById('sermons-grid');
+            const placeholder = document.getElementById('video-placeholder');
+            const currentTitle = document.getElementById('current-video-title');
+            const currentViews = document.getElementById('current-video-views');
+            const currentDate = document.getElementById('current-video-date');
+            const currentDescription = document.getElementById('current-video-description');
+
+            // Use event delegation on the grid container
+            grid.addEventListener('click', function(e) {
+                // Find the closest video card
+                const videoCard = e.target.closest('.yt-video-card');
+                
+                if (!videoCard) return;
+                
+                const videoId = videoCard.dataset.videoId;
+                const title = videoCard.dataset.title;
+                const views = videoCard.dataset.views;
+                const date = videoCard.dataset.date;
+                const description = videoCard.dataset.description;
+
+                // Validate video ID (YouTube IDs are exactly 11 characters)
+                if (!videoId || videoId.length !== 11) {
+                    console.error('Invalid video ID:', videoId);
+                    return;
+                }
+
+                // Hide placeholder
+                if (placeholder) {
+                    placeholder.style.display = 'none';
+                }
+
+                // Clear any existing error message
+                clearEmbedError();
+
+                // Load video in player
+                if (player && player.loadVideoById) {
+                    player.loadVideoById({
+                        videoId: videoId,
+                        suggestedQuality: 'default'
+                    });
+                }
+                
+                // Update video info
+                if (currentTitle) currentTitle.textContent = title;
+                if (currentViews) currentViews.textContent = views;
+                if (currentDate) currentDate.textContent = date;
+                if (currentDescription) currentDescription.textContent = description;
+                
+                currentVideoId = videoId;
+
+                // Scroll to video player
+                const featuredSection = document.getElementById('featured-sermon');
+                if (featuredSection) {
+                    featuredSection.scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+</html>
