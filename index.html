@@ -199,7 +199,7 @@
         </div>
     </section>
 
-    <!-- Latest Sermons Section -->
+     <!-- Latest Sermons Section -->
     <section class="section section-light" id="latest-sermons">
         <div class="container">
             <div class="section-header">
@@ -207,54 +207,13 @@
                 <div class="divider"></div>
                 <p>Grow in faith through the preaching of God's Word</p>
             </div>
-            <div class="sermons-grid">
-                <div class="sermon-card">
-                    <img src="https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=600&h=400&fit=crop" alt="Sermon" class="sermon-image">
-                    <div class="sermon-content">
-                        <div class="sermon-meta">
-                            <span><i class="fas fa-calendar"></i> Feb 16, 2025</span>
-                            <span><i class="fas fa-tag"></i> Faith</span>
-                        </div>
-                        <h4>Walking by Faith, Not by Sight</h4>
-                        <p class="sermon-speaker">Rev. Canon. James Ssempala</p>
-                        <p>A powerful message about trusting God in uncertain times and walking in faith.</p>
-                        <div class="sermon-actions">
-                            <a href="sermons.html" class="btn btn-primary">Watch</a>
-                            <a href="sermons.html" class="btn btn-outline">Listen</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="sermon-card">
-                    <img src="https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=600&h=400&fit=crop" alt="Sermon" class="sermon-image">
-                    <div class="sermon-content">
-                        <div class="sermon-meta">
-                            <span><i class="fas fa-calendar"></i> Feb 9, 2025</span>
-                            <span><i class="fas fa-tag"></i> Love</span>
-                        </div>
-                        <h4>The Greatest Commandment</h4>
-                        <p class="sermon-speaker">Pastor David Mukasa</p>
-                        <p>Exploring Jesus' teaching on loving God and loving our neighbors.</p>
-                        <div class="sermon-actions">
-                            <a href="sermons.html" class="btn btn-primary">Watch</a>
-                            <a href="sermons.html" class="btn btn-outline">Listen</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="sermon-card">
-                    <img src="https://images.unsplash.com/photo-1445251836439-29523b519c61?w=600&h=400&fit=crop" alt="Sermon" class="sermon-image">
-                    <div class="sermon-content">
-                        <div class="sermon-meta">
-                            <span><i class="fas fa-calendar"></i> Feb 2, 2025</span>
-                            <span><i class="fas fa-tag"></i> Prayer</span>
-                        </div>
-                        <h4>The Power of Persistent Prayer</h4>
-                        <p class="sermon-speaker">Rev. Canon. James Ssempala</p>
-                        <p>Understanding the importance of perseverance in our prayer life.</p>
-                        <div class="sermon-actions">
-                            <a href="sermons.html" class="btn btn-primary">Watch</a>
-                            <a href="sermons.html" class="btn btn-outline">Listen</a>
-                        </div>
-                    </div>
+            <div class="sermons-grid" id="latest-sermons-grid">
+                <!-- Sermons will be loaded dynamically from Firebase -->
+                <div class="no-sermons-message" id="no-latest-sermons" style="display: none; text-align: center; padding: 60px 20px; background: var(--white); border-radius: 12px; box-shadow: var(--shadow); grid-column: 1 / -1;">
+                    <i class="fas fa-video-slash" style="font-size: 4rem; color: var(--gold); margin-bottom: 20px;"></i>
+                    <h3 style="color: var(--primary-blue); margin-bottom: 15px;">No Sermons Available</h3>
+                    <p style="color: var(--medium-gray); margin-bottom: 25px;">Sermons will appear here once they are added through the Admin panel.</p>
+                    <a href="admin.html" class="btn btn-primary"><i class="fas fa-plus"></i> Add Sermons</a>
                 </div>
             </div>
             <div class="text-center mt-4">
@@ -319,7 +278,89 @@
         </div>
     </footer>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <!-- JavaScript -->
     <script src="js/script.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script>
+        // Load latest sermons from Firebase Realtime Database (same as sermons page)
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                // Initialize Firebase
+                firebaseConfig.initialize();
+                
+                // Fetch sermons from Firebase (with localStorage fallback)
+                const sermons = await firebaseConfig.getSermons();
+                const grid = document.getElementById('latest-sermons-grid');
+                const noSermonsMessage = document.getElementById('no-latest-sermons');
+                
+                if (sermons.length > 0) {
+                    // Hide no sermons message
+                    noSermonsMessage.style.display = 'none';
+                    
+                    // Get first 3 sermons (latest)
+                    const latestSermons = sermons.slice(0, 3);
+                    
+                    // Create sermon cards
+                    const sermonCards = latestSermons.map(sermon => createSermonCard(sermon)).join('');
+                    
+                    // Create a container for dynamic sermons
+                    const dynamicContainer = document.createElement('div');
+                    dynamicContainer.id = 'dynamic-latest-sermons';
+                    dynamicContainer.className = 'sermons-container';
+                    dynamicContainer.innerHTML = sermonCards;
+                    grid.insertBefore(dynamicContainer, noSermonsMessage);
+                } else {
+                    // Show no sermons message
+                    noSermonsMessage.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error loading sermons:', error);
+                const noSermonsMessage = document.getElementById('no-latest-sermons');
+                if (noSermonsMessage) {
+                    noSermonsMessage.style.display = 'block';
+                }
+            }
+        });
+        
+        // Create a sermon card HTML (matching sermons page structure)
+        function createSermonCard(sermon) {
+            const formattedDate = formatDate(sermon.date);
+            const fallbackThumbnail = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400"><rect fill="#1a1a2e" width="600" height="400"/><text fill="#d4af37" font-family="Arial" font-size="18" x="300" y="200" text-anchor="middle">Sermon Thumbnail</text></svg>');
+            
+            return `
+                <div class="sermon-card fade-in">
+                    <img src="https://img.youtube.com/vi/${sermon.videoId}/hqdefault.jpg" 
+                         alt="${sermon.title}"
+                         onerror="this.src='${fallbackThumbnail}'"
+                         class="sermon-image">
+                    <div class="sermon-content">
+                        <div class="sermon-meta">
+                            <span><i class="fas fa-calendar"></i> ${formattedDate}</span>
+                            <span><i class="fas fa-eye"></i> ${sermon.views} views</span>
+                        </div>
+                        <h4>${sermon.title}</h4>
+                        <p>${sermon.description}</p>
+                        <div class="sermon-actions">
+                            <a href="sermons.html#${sermon.videoId}" class="btn btn-primary">Watch</a>
+                            <a href="sermons.html#${sermon.videoId}" class="btn btn-outline">Listen</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Format date
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric', 
+                year: 'numeric' 
+            });
+        }
+    </script>
 </body>
 </html>
